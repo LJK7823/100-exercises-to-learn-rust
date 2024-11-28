@@ -3,6 +3,8 @@
 //   Even better, extract that logic and reuse it in both places. You can use
 //   private functions or private static methods for that.
 
+use common::valid_title;
+
 pub struct Ticket {
     title: String,
     description: String,
@@ -44,6 +46,45 @@ impl Ticket {
 
     pub fn status(&self) -> &String {
         &self.status
+    }
+
+    pub fn set_title(&mut self, new_title: String) {
+        validate_title(&new_title);
+        self.title = new_title;
+    }
+
+    pub fn set_description(&mut self, new_description: String) {
+        validate_description(&new_description);
+        self.description = new_description;
+    }
+
+    pub fn set_status(&mut self, new_status: String) {
+        validate_status(&new_status);
+        self.status = new_status;
+    }
+}
+
+pub fn validate_title(new_title: &String) {
+    if new_title.is_empty() {
+        panic!("Title cannot be empty");
+    }
+    if new_title.len() > 50 {
+        panic!("Title cannot be longer than 50 bytes");
+    }
+}
+
+pub fn validate_description(new_desc: &String) {
+    if new_desc.is_empty() {
+        panic!("Description cannot be empty");
+    }
+    if new_desc.len() > 500 {
+        panic!("Description cannot be longer than 500 bytes");
+    }
+}
+
+pub fn validate_status(new_status: &String) {
+    if new_status != "To-Do" && new_status != "In Progress" && new_status != "Done" {
+        panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
     }
 }
 
